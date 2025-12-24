@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { Check, Plus, Trash2 } from 'lucide-react'
+import { Plus, Check, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { isNonEmpty } from '@/lib/validation'
+import { useItemManager } from '@/hooks/use-item-manager'
 import type { Task, Data } from '@/types'
 import { BTN_DELETE, ADD_BTN, ADD_FORM } from '@/constants'
 import { EditableText } from './editable-text'
@@ -9,30 +10,28 @@ import { SectionHeader } from './section-header'
 
 interface TaskListProps {
   tasks: Task[]
-  update: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<Data>) => void
 }
 
-export function TaskList({ tasks, update }: TaskListProps) {
-  const [adding, setAdding] = useState(false)
-  const [newTask, setNewTask] = useState('')
+export function TaskList({ tasks, onUpdate }: TaskListProps) {
+  const {
+    isAdding,
+    draft,
+    setDraft,
+    add,
+    update,
+    remove,
+    startAdding,
+    cancelAdding,
+  } = useItemManager<Task>({
+    items: tasks,
+    onUpdate: (items) => onUpdate({ tasks: items }),
+    createEmpty: () => ({ text: '', completed: false }),
+  })
 
-  const addTask = () => {
-    if (!newTask.trim()) return
-    update({ tasks: [...tasks, { id: Date.now(), text: newTask, completed: false }] })
-    setNewTask('')
-    setAdding(false)
-  }
-
-  const toggleTask = (id: number) => {
-    update({ tasks: tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)) })
-  }
-
-  const updateTaskText = (id: number, text: string) => {
-    update({ tasks: tasks.map((t) => (t.id === id ? { ...t, text } : t)) })
-  }
-
-  const deleteTask = (id: number) => {
-    update({ tasks: tasks.filter((t) => t.id !== id) })
+  const handleAdd = () => {
+    if (!isNonEmpty(draft.text)) return
+    add()
   }
 
   return (
@@ -48,7 +47,7 @@ export function TaskList({ tasks, update }: TaskListProps) {
             )}
           >
             <button
-              onClick={() => toggleTask(task.id)}
+              onClick={() => update(task.id, { completed: !task.completed })}
               className={cn(
                 'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0',
                 task.completed ? 'bg-primary border-primary' : 'border-muted-foreground/40 hover:border-primary'
@@ -60,30 +59,30 @@ export function TaskList({ tasks, update }: TaskListProps) {
               <span className={cn('text-sm', task.completed && 'line-through text-muted-foreground')}>
                 <EditableText
                   value={task.text}
-                  onSave={(text) => updateTaskText(task.id, text)}
+                  onSave={(text) => update(task.id, { text })}
                 />
               </span>
             </div>
-            <button onClick={() => deleteTask(task.id)} className={BTN_DELETE}>
+            <button onClick={() => remove(task.id)} className={BTN_DELETE}>
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
         ))}
-        {adding ? (
+        {isAdding ? (
           <div className={cn(ADD_FORM, 'flex items-center gap-2')}>
             <input
               type="text"
               placeholder="Новая задача..."
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && addTask()}
+              value={draft.text}
+              onChange={(e) => setDraft({ ...draft, text: e.target.value })}
+              onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
               autoFocus
               className="flex-1 bg-transparent outline-none text-sm"
             />
-            <FormActions onConfirm={addTask} onCancel={() => setAdding(false)} />
+            <FormActions onConfirm={handleAdd} onCancel={cancelAdding} />
           </div>
         ) : (
-          <button onClick={() => setAdding(true)} className={ADD_BTN}>
+          <button onClick={startAdding} className={ADD_BTN}>
             <Plus className="w-4 h-4" />
             Добавить задачу
           </button>
