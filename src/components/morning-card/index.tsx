@@ -1,4 +1,4 @@
-import type { Data } from '@/types'
+import type { AppState } from '@/types'
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { Header } from './header'
 import { QuickLinks } from './quick-links'
@@ -18,7 +18,7 @@ export function MorningCard() {
     )
   }
 
-  const update = (patch: Partial<Data>) => saveData({ ...data, ...patch })
+  const update = (patch: Partial<AppState>) => saveData({ ...data, ...patch })
 
   return (
     <div className="w-full max-w-7xl">

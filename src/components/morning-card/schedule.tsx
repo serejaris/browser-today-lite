@@ -2,7 +2,7 @@ import { Plus, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { hasRequiredFields } from '@/lib/validation'
 import { useItemManager } from '@/hooks/use-item-manager'
-import type { ScheduleItem, Data } from '@/types'
+import type { ScheduleItem, AppState } from '@/types'
 import { SCHEDULE_STYLES, INPUT_CLASS, ADD_BTN, ADD_FORM } from '@/constants'
 import { EditableText } from './editable-text'
 import { FormActions } from './form-actions'
@@ -10,7 +10,7 @@ import { SectionHeader } from './section-header'
 
 interface ScheduleProps {
   schedule: ScheduleItem[]
-  onUpdate: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<AppState>) => void
 }
 
 export function Schedule({ schedule, onUpdate }: ScheduleProps) {

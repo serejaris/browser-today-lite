@@ -2,13 +2,13 @@ import { Plus, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { hasRequiredFields } from '@/lib/validation'
 import { useItemManager } from '@/hooks/use-item-manager'
-import type { QuickLink, Data } from '@/types'
+import type { QuickLink, AppState } from '@/types'
 import { INPUT_CLASS } from '@/constants'
 import { FormActions } from './form-actions'
 
 interface QuickLinksProps {
   quickLinks: QuickLink[]
-  onUpdate: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<AppState>) => void
 }
 
 export function QuickLinks({ quickLinks, onUpdate }: QuickLinksProps) {

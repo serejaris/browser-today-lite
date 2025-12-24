@@ -1,4 +1,4 @@
-import type { Data, ScheduleItem } from '@/types'
+import type { AppState, ScheduleItem } from '@/types'
 
 export const RU_WEEKDAYS = [
   'Воскресенье',
@@ -27,7 +27,7 @@ export const RU_MONTHS = [
 
 export const STORAGE_KEY = 'morning-card-data'
 
-export const defaultData: Data = {
+export const defaultData: AppState = {
   tasks: [
     { id: 1, text: 'Завершить презентацию проекта', completed: false },
     { id: 2, text: 'Созвон с командой в 14:00', completed: false },

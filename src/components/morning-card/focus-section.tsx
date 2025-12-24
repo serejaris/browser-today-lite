@@ -1,4 +1,4 @@
-import type { Data } from '@/types'
+import type { AppState } from '@/types'
 import { EditableText } from './editable-text'
 import { SectionHeader } from './section-header'
 
@@ -6,7 +6,7 @@ interface FocusSectionProps {
   weekFocus: string
   monthFocus: string
   quarterFocus: string
-  onUpdate: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<AppState>) => void
 }
 
 export function FocusSection({ weekFocus, monthFocus, quarterFocus, onUpdate }: FocusSectionProps) {

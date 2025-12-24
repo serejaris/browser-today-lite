@@ -2,7 +2,7 @@ import { Plus, Check, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { isNonEmpty } from '@/lib/validation'
 import { useItemManager } from '@/hooks/use-item-manager'
-import type { Task, Data } from '@/types'
+import type { Task, AppState } from '@/types'
 import { BTN_DELETE, ADD_BTN, ADD_FORM } from '@/constants'
 import { EditableText } from './editable-text'
 import { FormActions } from './form-actions'
@@ -10,7 +10,7 @@ import { SectionHeader } from './section-header'
 
 interface TaskListProps {
   tasks: Task[]
-  onUpdate: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<AppState>) => void
 }
 
 export function TaskList({ tasks, onUpdate }: TaskListProps) {

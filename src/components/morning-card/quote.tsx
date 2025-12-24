@@ -1,10 +1,10 @@
-import type { Data } from '@/types'
+import type { AppState } from '@/types'
 import { EditableText } from './editable-text'
 import { SectionHeader } from './section-header'
 
 interface QuoteProps {
   quote: string
-  onUpdate: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<AppState>) => void
 }
 
 export function Quote({ quote, onUpdate }: QuoteProps) {

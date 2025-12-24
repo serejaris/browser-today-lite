@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import type { Data } from '@/types'
+import type { AppState } from '@/types'
 import { defaultData, STORAGE_KEY } from '@/constants'
 
-export function useLocalStorage(): [Data, (data: Data) => void, boolean] {
-  const [data, setData] = useState<Data>(defaultData)
+export function useLocalStorage(): [AppState, (data: AppState) => void, boolean] {
+  const [data, setData] = useState<AppState>(defaultData)
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export function useLocalStorage(): [Data, (data: Data) => void, boolean] {
     setIsLoaded(true)
   }, [])
 
-  const saveData = (newData: Data) => {
+  const saveData = (newData: AppState) => {
     setData(newData)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newData))
   }

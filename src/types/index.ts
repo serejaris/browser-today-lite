@@ -17,7 +17,7 @@ export type QuickLink = {
   url: string
 }
 
-export interface Data {
+export interface AppState {
   tasks: Task[]
   schedule: ScheduleItem[]
   quickLinks: QuickLink[]
@@ -26,3 +26,6 @@ export interface Data {
   quarterFocus: string
   quote: string
 }
+
+/** @deprecated Use AppState instead */
+export type Data = AppState
