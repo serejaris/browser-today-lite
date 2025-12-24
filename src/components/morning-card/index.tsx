@@ -22,12 +22,12 @@ export function MorningCard() {
 
   return (
     <div className="w-full max-w-7xl">
-      <QuickLinks quickLinks={data.quickLinks} update={update} />
+      <QuickLinks quickLinks={data.quickLinks} onUpdate={update} />
       <Header />
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <TaskList tasks={data.tasks} update={update} />
-        <Schedule schedule={data.schedule} update={update} />
+        <TaskList tasks={data.tasks} onUpdate={update} />
+        <Schedule schedule={data.schedule} onUpdate={update} />
 
         <section className="space-y-4">
           <FocusSection
