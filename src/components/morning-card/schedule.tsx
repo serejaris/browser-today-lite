@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { hasRequiredFields } from '@/lib/validation'
+import { useItemManager } from '@/hooks/use-item-manager'
 import type { ScheduleItem, Data } from '@/types'
 import { SCHEDULE_STYLES, INPUT_CLASS, ADD_BTN, ADD_FORM } from '@/constants'
 import { EditableText } from './editable-text'
@@ -9,26 +10,28 @@ import { SectionHeader } from './section-header'
 
 interface ScheduleProps {
   schedule: ScheduleItem[]
-  update: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<Data>) => void
 }
 
-export function Schedule({ schedule, update }: ScheduleProps) {
-  const [adding, setAdding] = useState(false)
-  const [newSchedule, setNewSchedule] = useState<{ time: string; title: string; type: 'focus' | 'meeting' | 'break' }>({ time: '', title: '', type: 'focus' })
+export function Schedule({ schedule, onUpdate }: ScheduleProps) {
+  const {
+    isAdding,
+    draft,
+    setDraft,
+    add,
+    update,
+    remove,
+    startAdding,
+    cancelAdding,
+  } = useItemManager<ScheduleItem>({
+    items: schedule,
+    onUpdate: (items) => onUpdate({ schedule: items }),
+    createEmpty: () => ({ time: '', title: '', type: 'focus' as const }),
+  })
 
-  const addScheduleItem = () => {
-    if (!newSchedule.time || !newSchedule.title) return
-    update({ schedule: [...schedule, { id: Date.now(), ...newSchedule }] })
-    setNewSchedule({ time: '', title: '', type: 'focus' })
-    setAdding(false)
-  }
-
-  const updateScheduleItem = (id: number, patch: Partial<ScheduleItem>) => {
-    update({ schedule: schedule.map((s) => (s.id === id ? { ...s, ...patch } : s)) })
-  }
-
-  const deleteScheduleItem = (id: number) => {
-    update({ schedule: schedule.filter((s) => s.id !== id) })
+  const handleAdd = () => {
+    if (!hasRequiredFields(draft, ['time', 'title'])) return
+    add()
   }
 
   return (
@@ -44,19 +47,19 @@ export function Schedule({ schedule, update }: ScheduleProps) {
               <div className="flex-1 min-w-0">
                 <EditableText
                   value={item.time}
-                  onSave={(time) => updateScheduleItem(item.id, { time })}
+                  onSave={(time) => update(item.id, { time })}
                   className="text-xs font-mono text-muted-foreground mb-1 block"
                   placeholder="00:00"
                 />
                 <EditableText
                   value={item.title}
-                  onSave={(title) => updateScheduleItem(item.id, { title })}
+                  onSave={(title) => update(item.id, { title })}
                   className="text-sm font-medium"
                   placeholder="Событие..."
                 />
               </div>
               <button
-                onClick={() => deleteScheduleItem(item.id)}
+                onClick={() => remove(item.id)}
                 className="opacity-0 group-hover:opacity-100 p-1.5 text-muted-foreground hover:text-destructive rounded-md transition-opacity"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -64,39 +67,39 @@ export function Schedule({ schedule, update }: ScheduleProps) {
             </div>
           </div>
         ))}
-        {adding ? (
+        {isAdding ? (
           <div className={cn(ADD_FORM, 'space-y-3')}>
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="00:00"
-                value={newSchedule.time}
-                onChange={(e) => setNewSchedule({ ...newSchedule, time: e.target.value })}
+                value={draft.time}
+                onChange={(e) => setDraft({ ...draft, time: e.target.value })}
                 className={cn(INPUT_CLASS, 'w-20 text-xs font-mono')}
               />
               <input
                 type="text"
                 placeholder="Название события"
-                value={newSchedule.title}
-                onChange={(e) => setNewSchedule({ ...newSchedule, title: e.target.value })}
+                value={draft.title}
+                onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                 className={cn(INPUT_CLASS, 'flex-1')}
               />
             </div>
             <div className="flex items-center gap-2">
               <select
-                value={newSchedule.type}
-                onChange={(e) => setNewSchedule({ ...newSchedule, type: e.target.value as 'focus' | 'meeting' | 'break' })}
+                value={draft.type}
+                onChange={(e) => setDraft({ ...draft, type: e.target.value as ScheduleItem['type'] })}
                 className={cn(INPUT_CLASS, 'text-xs')}
               >
                 <option value="focus">Фокус</option>
                 <option value="meeting">Встреча</option>
                 <option value="break">Перерыв</option>
               </select>
-              <FormActions onConfirm={addScheduleItem} onCancel={() => setAdding(false)} />
+              <FormActions onConfirm={handleAdd} onCancel={cancelAdding} />
             </div>
           </div>
         ) : (
-          <button onClick={() => setAdding(true)} className={ADD_BTN}>
+          <button onClick={startAdding} className={ADD_BTN}>
             <Plus className="w-4 h-4" />
             Добавить событие
           </button>
