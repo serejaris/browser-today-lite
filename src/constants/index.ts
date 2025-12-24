@@ -28,31 +28,13 @@ export const RU_MONTHS = [
 export const STORAGE_KEY = 'morning-card-data'
 
 export const defaultData: AppState = {
-  tasks: [
-    { id: 1, text: 'Завершить презентацию проекта', completed: false },
-    { id: 2, text: 'Созвон с командой в 14:00', completed: false },
-    { id: 3, text: 'Отправить отчёт за неделю', completed: false },
-  ],
-  schedule: [
-    { id: 1, time: '09:00', title: 'Планирование дня', type: 'focus' },
-    { id: 2, time: '10:30', title: 'Статус-митинг', type: 'meeting' },
-    { id: 3, time: '12:00', title: 'Работа над проектом', type: 'focus' },
-    { id: 4, time: '14:00', title: 'Созвон с командой', type: 'meeting' },
-    { id: 5, time: '16:00', title: 'Перерыв', type: 'break' },
-    { id: 6, time: '17:00', title: 'Ревью задач', type: 'focus' },
-  ],
-  quickLinks: [
-    { id: 1, title: 'Gmail', url: 'https://mail.google.com' },
-    { id: 2, title: 'Calendar', url: 'https://calendar.google.com' },
-    { id: 3, title: 'Notion', url: 'https://notion.so' },
-    { id: 4, title: 'Slack', url: 'https://slack.com' },
-    { id: 5, title: 'GitHub', url: 'https://github.com' },
-    { id: 6, title: 'Figma', url: 'https://figma.com' },
-  ],
-  weekFocus: 'Запуск нового продукта. Фокус на качестве и деталях.',
-  monthFocus: 'Закрыть квартальные OKR. Подготовить демо для инвесторов.',
-  quarterFocus: 'Масштабирование продукта на 3 новых рынка.',
-  quote: 'Делай сегодня то, что другие не хотят — завтра будешь жить так, как другие не могут.',
+  tasks: [],
+  schedule: [],
+  quickLinks: [],
+  weekFocus: '',
+  monthFocus: '',
+  quarterFocus: '',
+  quote: '',
 }
 
 export const SCHEDULE_STYLES: Record<ScheduleItem['type'], string> = {
