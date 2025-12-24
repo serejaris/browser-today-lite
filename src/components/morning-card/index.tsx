@@ -34,9 +34,9 @@ export function MorningCard() {
             weekFocus={data.weekFocus}
             monthFocus={data.monthFocus}
             quarterFocus={data.quarterFocus}
-            update={update}
+            onUpdate={update}
           />
-          <Quote quote={data.quote} update={update} />
+          <Quote quote={data.quote} onUpdate={update} />
         </section>
       </div>
     </div>

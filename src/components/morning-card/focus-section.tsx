@@ -6,17 +6,17 @@ interface FocusSectionProps {
   weekFocus: string
   monthFocus: string
   quarterFocus: string
-  update: (patch: Partial<Data>) => void
+  onUpdate: (patch: Partial<Data>) => void
 }
 
-export function FocusSection({ weekFocus, monthFocus, quarterFocus, update }: FocusSectionProps) {
+export function FocusSection({ weekFocus, monthFocus, quarterFocus, onUpdate }: FocusSectionProps) {
   return (
     <>
       <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
         <SectionHeader>Фокус недели</SectionHeader>
         <EditableText
           value={weekFocus}
-          onSave={(v) => update({ weekFocus: v })}
+          onSave={(v) => onUpdate({ weekFocus: v })}
           className="text-sm leading-relaxed"
           placeholder="Введите фокус недели..."
         />
@@ -25,7 +25,7 @@ export function FocusSection({ weekFocus, monthFocus, quarterFocus, update }: Fo
         <SectionHeader>Фокус месяца</SectionHeader>
         <EditableText
           value={monthFocus}
-          onSave={(v) => update({ monthFocus: v })}
+          onSave={(v) => onUpdate({ monthFocus: v })}
           className="text-sm leading-relaxed"
           placeholder="Введите фокус месяца..."
         />
@@ -34,7 +34,7 @@ export function FocusSection({ weekFocus, monthFocus, quarterFocus, update }: Fo
         <SectionHeader>Фокус квартала</SectionHeader>
         <EditableText
           value={quarterFocus}
-          onSave={(v) => update({ quarterFocus: v })}
+          onSave={(v) => onUpdate({ quarterFocus: v })}
           className="text-sm leading-relaxed"
           placeholder="Введите фокус квартала..."
         />
